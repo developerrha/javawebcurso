@@ -52,10 +52,11 @@ class ServerHomzode{
         try{
             String task = getParameterValue( exchange, "task" );
             String requestB = exchange.getRequestMethod();
-            System.out.println("Request method: " + requestB );
+            String respath = exchange.getRequestURI().getPath();
+            System.out.println("Request method: " + requestB+" path: "+ respath);
             if( requestB.contains("GET")){
                 System.out.println("task_out= "+task);
-                if( task.equals("default") ){ 
+                if( task.equals("default") && respath.equals("/home") ){ 
                     InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/embedpage.html");
                     String response = new BufferedReader(new InputStreamReader(ins)).lines().collect(Collectors.joining("\n"));
                     exchange.sendResponseHeaders(200, response.getBytes().length);
@@ -76,9 +77,18 @@ class ServerHomzode{
                     exchange.sendResponseHeaders(200, targetArray.length);
                     os.write( targetArray );
                     os.close();
+                }else if( respath.contains(".js") ){ 
+                    String inpath = respath.substring( respath.lastIndexOf( "/" ) );
+                    System.out.println("inpath: " + inpath);
+                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources"+inpath);
+                    OutputStream os = exchange.getResponseBody();
+                    byte[] targetArray = ins.readAllBytes();
+                    exchange.sendResponseHeaders(200, targetArray.length);
+                    os.write( targetArray );
+                    os.close();
                 }
             }else if( requestB.contains("POST") ) { 
-
+                System.out.println("Arrive to POST now..");
             }  
         }catch(Exception e){
             e.printStackTrace();
