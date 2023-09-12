@@ -1,0 +1,27 @@
+
+<!DOCTYPE html PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<HTML>
+   <HEAD>
+      <TITLE>Formulario de registro </TITLE>
+      <link rel="stylesheet" href="http://192.168.10.60:8500/home/guest.css" type="text/css"/>
+   </HEAD>
+    <BODY>
+       <H2>Java web envio de formulario a HttpServer</H2>
+        <form class='register_form' id='register_form' method='POST' enctype='multipart/form-data' >
+            <div id='doregister'>
+                <ul><li><h2>Nuevo registro</h2><span class='required_notification'>* Datos requeridos</span><br><span class='promocion'>Diligencie el formulário y envie su registro.</span></br></li>
+                    <li><label for='nombres'>Nombres:</label> <input type='text' name='nombres' placeholder='Nombres del usuario...' maxlength='98' pattern='[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ. ]{1,98}' required/> </li>
+                    <li><label for='apellidos'>Apellidos:</label> <input type='text' name='apellidos' placeholder='Apellidos del usuario...' maxlength='58' pattern='[A-Za-z0-9ñÑáéíóúÁÉÍÓÚ. ]{1,58}' required/> </li>
+                    <li><label for='pais'>Pais:</label> <input type='text' name='pais' placeholder='Pais de residencia...' maxlength='98' pattern='[A-Za-z0-9\\.#\\- ]{1,98}' required/> </li>
+                    <li><label for='mail'>Correo:</label> <input type='email' name='mail' placeholder='Minegocio@nmail.com' maxlength='58' required/> </li>
+                    <li><label for='tel'>Teléfono:</label> <input type='number' name='tel' placeholder='Telefono de contacto...' maxlength='14' required/> </li>
+                    <li><label for='usuario'>Usuario:</label> <input type='text' name='usuario' placeholder='Usuario para acceso al sistema...' maxlength='14' pattern='[A-Za-z0-9]{1,14}' required/></li>
+                    <li><label for='clave'>Clave:</label> <input type='password' name='clave' placeholder='Clave para acceso al sistema, 4 números...' maxlength='4' pattern='[0-9]{1,4}' required/> </li>
+                    <li>
+                        <button id='submit' class='submit' type='submit' >Enviar registro</button>
+                    </li>
+                </ul>
+            </div>
+        </form>
+    </BODY>
+</HTML>

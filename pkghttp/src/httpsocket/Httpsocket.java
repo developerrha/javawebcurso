@@ -3,6 +3,7 @@
  */
 package httpsocket;
 
+import com.sun.net.httpserver.Headers;
 import com.sun.net.httpserver.HttpContext;
 import com.sun.net.httpserver.HttpExchange;
 import com.sun.net.httpserver.HttpServer;
@@ -12,6 +13,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.logging.Level;
@@ -48,28 +55,75 @@ public class Httpsocket {
 }
 
 class ServerHomzode{
+    private String task;
+    private String requestMethod;
+    private String respath;
+    //private String query;
+    private String kf;
+    
     public void serverHomzode( HttpExchange exchange ){
         try{
-            String task = getParameterValue( exchange, "task" );
-            String requestB = exchange.getRequestMethod();
-            String respath = exchange.getRequestURI().getPath();
-            System.out.println("Request method: " + requestB+" path: "+ respath);
-            if( requestB.contains("GET")){
-                System.out.println("task_out= "+task);
+            requestMethod = exchange.getRequestMethod();
+            //query = exchange.getRequestURI().getQuery();
+            //System.out.println("query: "+query);
+            System.out.println("Request method: " + requestMethod);
+            if( requestMethod.contains("GET")){
+                task = getParameterValue( exchange, "task" );
+                respath = exchange.getRequestURI().getPath();
+                System.out.println("task_out= "+task+" path: "+ respath);
+                doGet(exchange);
+            }else if( requestMethod.contains("POST") ) { 
+                System.out.println("Arrive to POST now..");
+                doPost(exchange);
+            }  
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+    }
+    /**
+    * Metodo que procesa requerimiento por POST
+    * @param exchange  
+    */
+        
+    private void doPost( HttpExchange exchange){
+        try{
+            HashMap<String,String> parMap = getPostParam(exchange);
+            //System.out.println("param razon: "+ parMap.get("razon") );
+            for(Map.Entry m:parMap.entrySet()){  
+               System.out.println("parMap: "+m.getKey()+"-> "+m.getValue());   
+            }  
+            InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/formreg.html");
+            String response = new BufferedReader(new InputStreamReader(ins)).lines().collect(Collectors.joining("\n"));
+            exchange.sendResponseHeaders(200, response.getBytes().length);
+            OutputStream os = exchange.getResponseBody();
+            os.write(response.getBytes());
+            os.close();
+        }catch( Exception e){
+            e.printStackTrace();
+        }
+    }
+    /**
+    * Metodo que procesa requerimiento por GET
+    * @param exchange  
+    */
+    private void doGet( HttpExchange exchange ){
+        try{
                 if( task.equals("default") && respath.equals("/home") ){ 
-                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/embedpage.html");
+                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/formreg.html");
                     String response = new BufferedReader(new InputStreamReader(ins)).lines().collect(Collectors.joining("\n"));
                     exchange.sendResponseHeaders(200, response.getBytes().length);
                     OutputStream os = exchange.getResponseBody();
                     os.write(response.getBytes());
                     os.close();
+                // Respouesta a requerimiento con parametros "?"        
                 }else if( task.equals("getimage") ){ 
-                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/fill_movil.jpg");
+                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/red_asterisk.png");
                     OutputStream os = exchange.getResponseBody();
                     byte[] targetArray = ins.readAllBytes();
                     exchange.sendResponseHeaders(200, targetArray.length);
                     os.write( targetArray );
                     os.close();
+                // Respouesta a requerimiento con parametros "?"            
                 }else if( task.equals("getvideo") ){ 
                     InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources/small_exportado.mp4");
                     OutputStream os = exchange.getResponseBody();
@@ -77,7 +131,20 @@ class ServerHomzode{
                     exchange.sendResponseHeaders(200, targetArray.length);
                     os.write( targetArray );
                     os.close();
-                }else if( respath.contains(".js") ){ 
+                // Respouesta a requerimiento con path "/"            
+                }else if( respath.contains(".js") || respath.contains(".css")  ){ 
+                    String inpath = respath.substring( respath.lastIndexOf( "/" ) );
+                    System.out.println("inpath: " + inpath);
+                    InputStream ins =  getClass().getClassLoader().getResourceAsStream("lib"+inpath);
+                    OutputStream os = exchange.getResponseBody();
+                    byte[] targetArray = ins.readAllBytes();
+                    exchange.sendResponseHeaders(200, targetArray.length);
+                    os.write( targetArray );
+                    os.close();
+                // Respouesta a requerimiento con path "/"                
+                }else if( respath.contains(".jpg")
+                        || respath.contains(".png")
+                        || respath.contains(".mp4") ){ 
                     String inpath = respath.substring( respath.lastIndexOf( "/" ) );
                     System.out.println("inpath: " + inpath);
                     InputStream ins =  getClass().getClassLoader().getResourceAsStream("resources"+inpath);
@@ -87,12 +154,37 @@ class ServerHomzode{
                     os.write( targetArray );
                     os.close();
                 }
-            }else if( requestB.contains("POST") ) { 
-                System.out.println("Arrive to POST now..");
-            }  
-        }catch(Exception e){
+
+        }catch( Exception e){
             e.printStackTrace();
         }
+    }
+    /**
+    * Metodo que obriene el valor de parametros enviados por POST
+    * @param exchange  
+    */
+    private HashMap getPostParam( HttpExchange exchange){
+        HashMap<String,String> parMap = new HashMap<String,String>();
+        try{
+            byte[] array = new byte[1024];
+            InputStream inpost = exchange.getRequestBody();
+            BufferedReader reader = new BufferedReader(new InputStreamReader( inpost ));
+            while(reader.ready()) {
+                String line = reader.readLine();
+                if( line.length() <= 0 || line.contains("---") )continue;
+                if( line.contains("=")  ){
+                    int posini = line.indexOf("\"") + 1;
+                    int posfin = line.lastIndexOf( "\"" );
+                    kf = line.substring( posini , posfin  );
+                }else{
+                    parMap.put(kf, line);
+                }
+            }
+            inpost.close();
+        }catch( Exception e){
+            e.printStackTrace();
+        }
+        return parMap;
     }
     
     private String getParameterValue( HttpExchange exch, String toMatch ){
