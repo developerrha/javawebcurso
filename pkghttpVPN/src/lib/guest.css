@@ -1,0 +1,167 @@
+/* 
+    Created on : 26/05/2017, 07:31:13 PM
+    Author     : Rafael Hernando Alvarez Cardenas
+*/
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+body{  
+    width: 95%; 
+    /*margin: auto;*/
+    min-width:600px;
+    max-width:2000px;
+}
+
+/*new record*/
+.register_form { 
+    position: relative;
+    top: 20px;
+    left: 20px;
+    /*float: left;*/
+    background-color: rgba(216,214,218,1);
+    /*background-color: hsla(0, 100%, 30%, 0.7);*/
+    font: 14px/21px "Lucida Sans", "Lucida Grande", "Lucida Sans Unicode", sans-serif; 
+    width: 60%;
+    height: 85%;
+    
+}
+#doregister{
+    position: relative;
+    width: 100%;
+    height: 100%;
+    background-color: transparent;
+    /*display: block; 
+    overflow: scroll;*/
+    
+}
+.promocion{
+    color: graytext; 
+    margin: 5px 0 0 0; 
+    display: inline; 
+    float: left;
+}
+.advertencia{
+    color:  #F44000; 
+    margin: 5px 0 0 0; 
+    display: inline; 
+    float: left;
+}
+.register_form ul {
+    position: relative;
+    width: 100%; 
+    height: 100%;
+    list-style-type: none; 
+    list-style-position: outside;
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: transparent;
+    margin: 0px; 
+    padding: 0px; 
+}
+.register_form ul li { 
+    position: relative; 
+    padding: 12px;
+    border-bottom: 1px solid #eee; 
+    background-color: transparent;
+    display: block;
+    height: auto;
+} 
+.register_form li:first-child, .register_form li:last-child { 
+    /*border-bottom: 1px solid #777; */
+}
+.register_form label { 
+    width: 150px; 
+    margin-top: 3px; 
+    display: inline-block; 
+    float: left; 
+    padding: 3px; 
+}
+.register_form h2 { 
+    margin: 0; 
+    display: inline; 
+}
+.required_notification { 
+    color: #d45252; 
+    margin: 5px 0 0 0; 
+    display: inline; 
+    float: right; 
+}
+.register_form h2, .register_form label {
+    font-family: Georgia, Times, "Times New Roman", serif;
+}
+
+
+.register_form input { 
+    height: 30px; 
+    width: 70%; 
+    padding: 5px 8px; 
+    background-color: transparent;
+    border: 0.10em solid #fff;
+}
+ 
+.register_form input:focus { 
+    background: #fff; 
+    border: 1px solid #555; 
+    box-shadow: 0 0 3px #aaa; 
+    padding-right: 70px;
+}
+.register_form input:focus + .form_hint { 
+    display: inline; 
+} 
+.register_form input:required:valid + .form_hint { 
+    background: #28921f; } 
+.register_form input:required:valid + .form_hint::before { 
+    color: #28921f; 
+} 
+/*.register_form input:required { 
+    background: transparent url(http://192.168.10.60:8500/home/red_asterisk.png) no-repeat 98% center; 
+} 
+.register_form input:required:valid { 
+    background: #fff url(http://192.168.10.60:8500/home/valid.png) no-repeat 98% center; box-shadow: 0 0 5px #5cd053; border-color: #28921f; } 
+.register_form input:focus:invalid º{ 
+    background: #fff url(http://192.168.10.60:8500/home/invalid.png) no-repeat 98% center; box-shadow: 0 0 5px #d45252; border-color: #b03535; 
+}*/
+#private{ 
+    height: 20px; 
+    width: 5%; 
+    padding: 5px 8px; 
+}
+button.submit { 
+    background-color: #68b12f; 
+    background: -webkit-gradient(linear, left top, left bottom, from(#68b12f), to(#50911e)); 
+    background: -webkit-linear-gradient(top, #68b12f, #50911e); 
+    background: -moz-linear-gradient(top, #68b12f, #50911e); 
+    background: -ms-linear-gradient(top, #68b12f, #50911e); 
+    background: -o-linear-gradient(top, #68b12f, #50911e); 
+    background: linear-gradient(top, #68b12f, #50911e); 
+    border: 1px solid #509111; 
+    border-bottom: 1px solid #5b992b; 
+    border-radius: 3px; 
+    -webkit-border-radius: 3px; 
+    -moz-border-radius: 3px; 
+    -ms-border-radius: 3px; 
+    -o-border-radius: 3px; 
+    box-shadow: inset 0 1px 0 0 #9fd574; 
+    -webkit-box-shadow: 0 1px 0 0 #9fd574 inset; 
+    -moz-box-shadow: 0 1px 0 0 #9fd574 inset; 
+    -ms-box-shadow: 0 1px 0 0 #9fd574 inset; 
+    -o-box-shadow: 0 1px 0 0 #9fd574 inset; 
+    color: white; 
+    font-weight: bold; 
+    padding: 6px 20px; 
+    text-align: center; 
+    text-shadow: 0 -1px 0 #396715; 
+}
+.register_form button { 
+    margin-left: 156px; 
+}
+button.submit:hover { 
+    opacity: .85; 
+    cursor: pointer; 
+}
+button.submit:active { 
+    border: 1px solid #20911e; 
+    box-shadow: 0 0 10px 5px #356b0b inset; 
+    -webkit-box-shadow: 0 0 10px 5px #356b0b inset; 
+    -moz-box-shadow: 0 0 10px 5px #356b0b inset; 
+    -ms-box-shadow: 0 0 10px 5px #356b0b inset; 
+    -o-box-shadow: 0 0 10px 5px #356b0b inset; 
+}
